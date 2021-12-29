@@ -5,6 +5,38 @@ import google.api_core.exceptions
 
 
 #
+def create_dataset(client: google.cloud.bigquery.Client, dataset_name: str) -> dict:
+
+    # build output object
+    _return_value = {
+        'name': dataset_name,
+        'created': None,
+        'exceptions': []
+    }
+
+    #
+    _dataset_id = '.'.join([client.project, dataset_name])
+    _dataset = bq.Dataset(_dataset_id)
+
+    # TODO: add kwargs
+    # dataset.location = ''
+    # dataset.description = ''
+
+    # ensure the dataset exists
+    try:
+        _dataset_obj = client.create_dataset(_dataset, timeout=30)
+        _return_value['created'] = True
+    except google.api_core.exceptions.Conflict as ex:
+        _dataset_obj = None
+        _return_value['created'] = False
+        _return_value['exceptions'].append(ex.message)
+    finally:
+        _dataset_obj = client.get_dataset(_dataset_id)
+
+    return _dataset_obj, _return_value
+
+
+#
 def create_table(dataset_name: str, table_name: str, data_definition: list) -> dict:
 
     # build output object

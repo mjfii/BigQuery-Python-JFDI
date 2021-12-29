@@ -27,11 +27,12 @@ def get_client() -> dict:
     # get the big query client from the service account info
     # TODO: catch specific exceptions
     try:
-        client = bq.Client.from_service_account_info(_service_account_info)
-        _return_value['project_id'] = client.project
-        _return_value['scope'] = client.SCOPE
+        _client = bq.Client.from_service_account_info(_service_account_info)
+        _return_value['project_id'] = _client.project
+        _return_value['scope'] = _client.SCOPE
     except Exception as ex:
         _return_value['errors'].append(ex)
         return _return_value
 
-    return _return_value
+    return _client, _return_value
+
