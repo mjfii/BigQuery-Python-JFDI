@@ -20,8 +20,8 @@ def create_dataset(client: google.cloud.bigquery.Client, dataset_name: str) -> d
 
     # TODO: add kwargs
     # dataset.location = ''
-    # dataset.description = ''
 
+    # dataset.description = ''
     # ensure the dataset exists
     try:
         _dataset_obj = client.create_dataset(_dataset, timeout=30)
